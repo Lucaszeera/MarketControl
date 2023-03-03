@@ -2,35 +2,36 @@
 Sistema de controle de estoque.
 
 ## Endpoints
-- Cadastro de produto
-    - [Cadastrar](#cadastrar-produto)
+- [Cadastro de produto](#cadastrar-produto)
+    - Cadastrar
     - Listar todos
     - Apagar
     - Alterar
     - [Mostrar os detalhes](#detalhar-produto)
 
-- Cadastro de estabelecimento
-    - [Cadastrar](#cadastrar-estabelecimento)
+- [Cadastro de estabelecimento](#cadastrar-estabelecimento)
+    - Cadastrar
     - Listar todos
     - Apagar
     - Alterar
     
-- Analise de estoque
-    - [Listar produtos](#analise-de-estoque)
+- [Analise de estoque](#analise-de-estoque)
+    - Listar produtos
     
-- Cadastro de responsavel
+- [Cadastro de responsavel](#cadastrar-responsavel)
     - Cadastrar
 
-- Perfil do responsavel
+- [Perfil do responsavel](#perfil-do-responsavel)
     - Alterar
     - Mostrar os detalhes
 
+--- 
 
 ## Cadastrar Produto 
 `POST` /marketcontrol/api/produto
 
 | campo | tipo | obrigatorio | descricao 
-|-----|:----:|-----------|---------
+|-----|:----:|:-----------:|---------
 | valor | decimal | sim | eh o valor do produto. deve ser maior que zero 
 | categoria_id | int | sim | eh o id de uma categoria previamente cadastrada 
 | data_cadastro | data | sim | eh a data do cadastro
@@ -81,7 +82,7 @@ Sistema de controle de estoque.
 `POST` /marketcontrol/api/estabelecimento/cadastro
 
 | campo | tipo | obrigatorio | descricao 
-|-----|:----:|-----------|---------
+|-----|:----:|:-----------:|---------
 | nome_estabelecimento | texto | sim | eh nome do estabelecimento. 
 | categoria_id | int | sim | eh o id de uma categoria previamente cadastrada. 
 | cnpj | numero | sim | eh o CNPJ do comercio.
@@ -112,7 +113,7 @@ Sistema de controle de estoque.
 `GET` /marketcontrol/api/estoque/analise
 
 | campo | tipo | obrigatorio | descricao 
-|-----|:----:|-----------|--------- 
+|-------|:----:|:-----------:|--------- 
 | categoria_id | int | sim | eh o id de uma categoria previamente cadastrada. 
 | nome_produto | texto | sim | eh o nome do produto.
 | valor_produto | numero | sim | eh o valor do produto.
@@ -141,7 +142,7 @@ Sistema de controle de estoque.
 `POST` /marketcontrol/api/cadastro/responsavel
 
 | campo | tipo | obrigatorio | descricao 
-|-----|:----:|-----------|---------
+|-----|:----:|:-----------:|---------
 | nome | texto | sim | eh o nome do responsavel 
 | cpf | int | sim | eh o cpf do responsavel 
 | data_admissao | data | sim | eh a data de admissao 
@@ -168,3 +169,35 @@ Sistema de controle de estoque.
 | 400 | erro na validacao dos dados da requisicao
 
 ---
+
+## Perfil do Responsavel 
+`GET` /marketcontrol/api/responsavel/{id}
+
+| campo | tipo | obrigatorio | descricao 
+|-------|:----:|:-----------:|---------
+| nome | texto | sim | eh o nome do responsavel  
+| codigo_id | int | sim | eh o codigo de identificacao
+| codigo_setor | int | sim | eh o codigo do setor de atuacao do responsavel. 
+| data_admissao | data | sim | eh a data de admissao 
+
+**Exemplo de corpo do request**
+
+```js
+{
+    "nome" : "Mario Kart De Assis",
+    "cpf" : 111.777.345-06,
+    "codigo_id" : 120,
+    "codigo_setor" : 240
+    "data_admissao" : 2023-01-12,
+}
+```
+
+**Codigos de resposta**
+
+| codigo | descricao
+|-|-
+| 200 | responsavel encontrado
+| 400 | erro na validacao dos dados da requisicao
+
+---
+

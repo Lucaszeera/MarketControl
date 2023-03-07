@@ -1,5 +1,5 @@
 # MarketControl
-Sistema de controle de estoque.
+Sistema de controle de estoque de comércios.
 
 ## Endpoints
 - [Cadastro de produto](#cadastrar-produto)
@@ -79,7 +79,7 @@ Sistema de controle de estoque.
 **Codigos de resposta**
 
 ## Cadastrar Estabelecimento 
-`POST` /marketcontrol/api/estabelecimento/cadastro
+`POST` /marketcontrol/api/estabelecimento
 
 | campo | tipo | obrigatorio | descricao 
 |-----|:----:|:-----------:|---------
@@ -139,7 +139,7 @@ Sistema de controle de estoque.
 | 400 | erro na validacao dos dados da requisicao
 
 ## Cadastrar Responsavel 
-`POST` /marketcontrol/api/cadastro/responsavel
+`POST` /marketcontrol/api/responsavel
 
 | campo | tipo | obrigatorio | descricao 
 |-----|:----:|:-----------:|---------

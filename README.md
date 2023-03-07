@@ -77,6 +77,12 @@ Sistema de controle de estoque de comércios.
 ```
 
 **Codigos de resposta**
+| codigo | descricao
+|-|-
+| 200 | dados do produto retornados no corpo da resposta
+| 404 | id do produto não encontrado
+
+---
 
 ## Cadastrar Estabelecimento 
 `POST` /marketcontrol/api/estabelecimento
@@ -134,9 +140,8 @@ Sistema de controle de estoque de comércios.
 
 | codigo | descricao
 |-|-
-| 200 | produtos listados com sucesso
-| 204 | nenhum conteudo
-| 400 | erro na validacao dos dados da requisicao
+| 200 | produtos retornados com sucesso
+| 404 | não foram encontrados dados através dessa requisição
 
 ## Cadastrar Responsavel 
 `POST` /marketcontrol/api/responsavel
@@ -197,7 +202,7 @@ Sistema de controle de estoque de comércios.
 | codigo | descricao
 |-|-
 | 200 | responsavel encontrado
-| 400 | erro na validacao dos dados da requisicao
+| 404 | id do responsavel não encontrado
 
 ---
 

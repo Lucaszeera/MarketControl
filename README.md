@@ -1,5 +1,5 @@
 # MarketControl
-Sistema de controle de estoque.
+Sistema de controle de estoque de comércios.
 
 ## Endpoints
 - [Cadastro de produto](#cadastrar-produto)
@@ -44,10 +44,15 @@ Sistema de controle de estoque.
 ```js
 {
     "valor" : 100.00,
-    "categoria_id" : 1,
-    "conta_id" : 1,
-    "data_cadastro" : "2023-01-27"
-    "data_validade" : "2023-10-21"
+    "categoria":{
+        "categoria_id" : 1,
+        "nome_categoria": "limpeza"
+        }
+    "data_cadastro" : "2023-01-27",   
+    "data_validade" : "2023-10-21",
+    "quantidade" : 15,
+    "descricao" : 35,
+    "produto_id" : 1
 }
 ```
 
@@ -70,16 +75,24 @@ Sistema de controle de estoque.
     "valor" : 100.00,
     "categoria" : {
         "categoria_id" : 1,
-        "nome" : "Sabao OMO"
-        "data_cadastro" : "2023-10-7"
+        "nome_categoria" : "limpeza"
     }
+    "nome" : "Sabao OMO"
+    "data_cadastro" : "2023-10-7"
+    
 }
 ```
 
 **Codigos de resposta**
+| codigo | descricao
+|-|-
+| 200 | dados do produto retornados no corpo da resposta
+| 404 | id do produto não encontrado
+
+---
 
 ## Cadastrar Estabelecimento 
-`POST` /marketcontrol/api/estabelecimento/cadastro
+`POST` /marketcontrol/api/estabelecimento
 
 | campo | tipo | obrigatorio | descricao 
 |-----|:----:|:-----------:|---------
@@ -94,9 +107,15 @@ Sistema de controle de estoque.
 ```js
 {
     "nome_estabelecimento" : "Mercadinho do Calvo Roger",
-    "categoria_id" : 1,
+    "categoria":{
+        "categoria_id" : 2,
+        "nome_categoria": "bebidas e alimenticios"
+        }
     "cnpj" : "32.480.846/0001-62",
-    "nome_proprietario" : "Roger"
+    "proprietario":{
+        "nome_proprietario" : "Roger",
+        "id_proprietario" : 3,
+        "cpf_proprietario" : "010-202-330.04"
 }
 ```
 
@@ -112,18 +131,15 @@ Sistema de controle de estoque.
 ## Analise de estoque
 `GET` /marketcontrol/api/estoque/analise
 
-| campo | tipo | obrigatorio | descricao 
-|-------|:----:|:-----------:|--------- 
-| categoria_id | int | sim | eh o id de uma categoria previamente cadastrada. 
-| nome_produto | texto | sim | eh o nome do produto.
-| valor_produto | numero | sim | eh o valor do produto.
-| quantidade | numero | sim | eh a quantidade disponivel do produto.
-
 **Exemplo de corpo do request**
 
 ```js
 {
-    "categoria_id" : 1,
+    "id_produto" : 1,
+    "categoria":{
+        "categoria_id" : 2,
+        "nome_categoria" : "enlatado"
+        }
     "nome_produto" : "Sabao Tixan",
     "valor_produto" : 10.00,
     "quantidade" : 10
@@ -134,12 +150,11 @@ Sistema de controle de estoque.
 
 | codigo | descricao
 |-|-
-| 200 | produtos listados com sucesso
-| 204 | nenhum conteudo
-| 400 | erro na validacao dos dados da requisicao
+| 200 | produtos retornados com sucesso
+| 404 | não foram encontrados dados através dessa requisição
 
 ## Cadastrar Responsavel 
-`POST` /marketcontrol/api/cadastro/responsavel
+`POST` /marketcontrol/api/responsavel
 
 | campo | tipo | obrigatorio | descricao 
 |-----|:----:|:-----------:|---------
@@ -157,7 +172,10 @@ Sistema de controle de estoque.
     "cpf" : 111.111.111-01,
     "data_admissao" : 2023-01-12,
     "codigo_id" : 120,
-    "codigo_setor" : 240
+    "setor" : {
+        "codigo_setor" : 240
+        "nome_setor" : "frutas"
+        }
 }
 ```
 
@@ -173,22 +191,18 @@ Sistema de controle de estoque.
 ## Perfil do Responsavel 
 `GET` /marketcontrol/api/responsavel/{id}
 
-| campo | tipo | obrigatorio | descricao 
-|-------|:----:|:-----------:|---------
-| nome | texto | sim | eh o nome do responsavel  
-| codigo_id | int | sim | eh o codigo de identificacao
-| codigo_setor | int | sim | eh o codigo do setor de atuacao do responsavel. 
-| data_admissao | data | sim | eh a data de admissao 
-
 **Exemplo de corpo do request**
 
 ```js
 {
     "nome" : "Mario Kart De Assis",
     "cpf" : 111.777.345-06,
-    "codigo_id" : 120,
-    "codigo_setor" : 240
     "data_admissao" : 2023-01-12,
+    "codigo_id" : 120,
+    "setor" : {
+        "codigo_setor" : 240,
+        "nome_setor" : "frutas"
+        }
 }
 ```
 
@@ -197,7 +211,7 @@ Sistema de controle de estoque.
 | codigo | descricao
 |-|-
 | 200 | responsavel encontrado
-| 400 | erro na validacao dos dados da requisicao
+| 404 | id do responsavel não encontrado
 
 ---
 

@@ -44,7 +44,10 @@ Sistema de controle de estoque de comércios.
 ```js
 {
     "valor" : 100.00,
-    "categoria_id" : 1,
+    "categoria":{
+        "categoria_id" : 1,
+        "nome_categoria": "limpeza"
+        }
     "data_cadastro" : "2023-01-27",   
     "data_validade" : "2023-10-21",
     "quantidade" : 15,
@@ -71,10 +74,12 @@ Sistema de controle de estoque de comércios.
 {
     "valor" : 100.00,
     "categoria" : {
-    "categoria_id" : 1,
+        "categoria_id" : 1,
+        "nome_categoria" : "limpeza"
+    }
     "nome" : "Sabao OMO"
     "data_cadastro" : "2023-10-7"
-    }
+    
 }
 ```
 
@@ -102,9 +107,15 @@ Sistema de controle de estoque de comércios.
 ```js
 {
     "nome_estabelecimento" : "Mercadinho do Calvo Roger",
-    "categoria_id" : 1,
+    "categoria":{
+        "categoria_id" : 2,
+        "nome_categoria": "bebidas e alimenticios"
+        }
     "cnpj" : "32.480.846/0001-62",
-    "nome_proprietario" : "Roger"
+    "proprietario":{
+        "nome_proprietario" : "Roger",
+        "id_proprietario" : 3,
+        "cpf_proprietario" : "010-202-330.04"
 }
 ```
 
@@ -125,7 +136,10 @@ Sistema de controle de estoque de comércios.
 ```js
 {
     "id_produto" : 1,
-    "categoria_id" : 1,
+    "categoria":{
+        "categoria_id" : 2,
+        "nome_categoria" : "enlatado"
+        }
     "nome_produto" : "Sabao Tixan",
     "valor_produto" : 10.00,
     "quantidade" : 10
@@ -158,7 +172,10 @@ Sistema de controle de estoque de comércios.
     "cpf" : 111.111.111-01,
     "data_admissao" : 2023-01-12,
     "codigo_id" : 120,
-    "codigo_setor" : 240
+    "setor" : {
+        "codigo_setor" : 240
+        "nome_setor" : "frutas"
+        }
 }
 ```
 
@@ -182,7 +199,10 @@ Sistema de controle de estoque de comércios.
     "cpf" : 111.777.345-06,
     "data_admissao" : 2023-01-12,
     "codigo_id" : 120,
-    "codigo_setor" : 240
+    "setor" : {
+        "codigo_setor" : 240,
+        "nome_setor" : "frutas"
+        }
 }
 ```
 

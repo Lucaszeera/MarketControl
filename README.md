@@ -45,9 +45,11 @@ Sistema de controle de estoque de comércios.
 {
     "valor" : 100.00,
     "categoria_id" : 1,
-    "conta_id" : 1,
-    "data_cadastro" : "2023-01-27"
-    "data_validade" : "2023-10-21"
+    "data_cadastro" : "2023-01-27",   
+    "data_validade" : "2023-10-21",
+    "quantidade" : 15,
+    "descricao" : 35,
+    "produto_id" : 1
 }
 ```
 
@@ -69,9 +71,9 @@ Sistema de controle de estoque de comércios.
 {
     "valor" : 100.00,
     "categoria" : {
-        "categoria_id" : 1,
-        "nome" : "Sabao OMO"
-        "data_cadastro" : "2023-10-7"
+    "categoria_id" : 1,
+    "nome" : "Sabao OMO"
+    "data_cadastro" : "2023-10-7"
     }
 }
 ```
@@ -118,17 +120,11 @@ Sistema de controle de estoque de comércios.
 ## Analise de estoque
 `GET` /marketcontrol/api/estoque/analise
 
-| campo | tipo | obrigatorio | descricao 
-|-------|:----:|:-----------:|--------- 
-| categoria_id | int | sim | eh o id de uma categoria previamente cadastrada. 
-| nome_produto | texto | sim | eh o nome do produto.
-| valor_produto | numero | sim | eh o valor do produto.
-| quantidade | numero | sim | eh a quantidade disponivel do produto.
-
 **Exemplo de corpo do request**
 
 ```js
 {
+    "id_produto" : 1,
     "categoria_id" : 1,
     "nome_produto" : "Sabao Tixan",
     "valor_produto" : 10.00,
@@ -178,22 +174,15 @@ Sistema de controle de estoque de comércios.
 ## Perfil do Responsavel 
 `GET` /marketcontrol/api/responsavel/{id}
 
-| campo | tipo | obrigatorio | descricao 
-|-------|:----:|:-----------:|---------
-| nome | texto | sim | eh o nome do responsavel  
-| codigo_id | int | sim | eh o codigo de identificacao
-| codigo_setor | int | sim | eh o codigo do setor de atuacao do responsavel. 
-| data_admissao | data | sim | eh a data de admissao 
-
 **Exemplo de corpo do request**
 
 ```js
 {
     "nome" : "Mario Kart De Assis",
     "cpf" : 111.777.345-06,
+    "data_admissao" : 2023-01-12,
     "codigo_id" : 120,
     "codigo_setor" : 240
-    "data_admissao" : 2023-01-12,
 }
 ```
 

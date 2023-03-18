@@ -106,16 +106,13 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "nome_estabelecimento" : "Mercadinho do Calvo Roger",
-    "categoria":{
-        "categoria_id" : 2,
-        "nome_categoria": "bebidas e alimenticios"
-        }
+    "nome" : "Mercadinho do Calvo Roger",
+    "id" : 2,
+    "nome_categoria": 
+    "bebidas e alimenticios",
     "cnpj" : "32.480.846/0001-62",
-    "proprietario":{
-        "nome_proprietario" : "Roger",
-        "id_proprietario" : 3,
-        "cpf_proprietario" : "010-202-330.04"
+    "nomeProprietario" : "Roger",
+    "cpfProprietario" : "010-202-330.04"
 }
 ```
 
@@ -135,12 +132,12 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "id_produto" : 1,
+    "id" : 1, 
+    "nome_produto" : "Sabao Tixan",
     "categoria":{
         "categoria_id" : 2,
         "nome_categoria" : "enlatado"
-        }
-    "nome_produto" : "Sabao Tixan",
+        },
     "valor_produto" : 10.00,
     "quantidade" : 10
 }
@@ -168,10 +165,10 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "nome" : "Jose Carlos Ferreira",
+    "nome" : "Jose Carlos Ferreira",    
+    "id" : 120,
     "cpf" : 111.111.111-01,
     "data_admissao" : 2023-01-12,
-    "codigo_id" : 120,
     "setor" : {
         "codigo_setor" : 240
         "nome_setor" : "frutas"
@@ -195,10 +192,10 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "nome" : "Mario Kart De Assis",
+    "nome" : "Mario Kart De Assis",    
+    "id" : 120,
     "cpf" : 111.777.345-06,
     "data_admissao" : 2023-01-12,
-    "codigo_id" : 120,
     "setor" : {
         "codigo_setor" : 240,
         "nome_setor" : "frutas"

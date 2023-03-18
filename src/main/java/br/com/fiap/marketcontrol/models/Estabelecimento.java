@@ -2,41 +2,57 @@ package br.com.fiap.marketcontrol.models;
 
 public class Estabelecimento {
     String nome;
-    int categoria_id;
+    Long id;
     String cnpj;
-    String nome_proprietario;
-    
-    public Estabelecimento(String nome, int categoria_id, String cnpj, String nome_proprietario) {
+    String nomeProprietario;
+    String cpfProprietario;
+
+    public Estabelecimento(String nome, Long id, String cnpj, String nomeProprietario, String cpfProprietario) {
         this.nome = nome;
-        this.categoria_id = categoria_id;
+        this.id = id;
         this.cnpj = cnpj;
-        this.nome_proprietario = nome_proprietario;
+        this.nomeProprietario = nomeProprietario;
+        this.cpfProprietario = cpfProprietario;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public int getCategoria_id() {
-        return categoria_id;
+
+    public Long getId() {
+        return id;
     }
-    public void setCategoria_id(int categoria_id) {
-        this.categoria_id = categoria_id;
+
+    public void setId(Long id) {
+        this.id = id;
     }
+
     public String getCnpj() {
         return cnpj;
     }
+
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
-    public String getNome_proprietario() {
-        return nome_proprietario;
-    }
-    public void setNome_proprietario(String nome_proprietario) {
-        this.nome_proprietario = nome_proprietario;
+
+    public String getNomeProprietario() {
+        return nomeProprietario;
     }
 
+    public void setNomeProprietario(String nomeProprietario) {
+        this.nomeProprietario = nomeProprietario;
+    }
 
-    
+    public String getCpfProprietario() {
+        return cpfProprietario;
+    }
+
+    public void setCpfProprietario(String cpfProprietario) {
+        this.cpfProprietario = cpfProprietario;
+    }
+
 }

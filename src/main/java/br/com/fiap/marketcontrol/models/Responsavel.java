@@ -7,14 +7,14 @@ public class Responsavel {
     String nome;
     String cpf;
     Calendar dataAdmissao;
-    int codigo_id;
+    Long id;
     int codigo_setor;
     
-    public Responsavel(String nome, String cpf, Calendar dataAdmissao, int codigo_id, int codigo_setor) {
+    public Responsavel(String nome, String cpf, Calendar dataAdmissao, Long id, int codigo_setor) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataAdmissao = dataAdmissao;
-        this.codigo_id = codigo_id;
+        this.id = id;
         this.codigo_setor = codigo_setor;
     }
     public String getNome() {
@@ -35,11 +35,11 @@ public class Responsavel {
     public void setDataAdmissao(Calendar dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
-    public int getCodigo_id() {
-        return codigo_id;
+    public Long getId() {
+        return id;
     }
-    public void setCodigo_id(int codigo_id) {
-        this.codigo_id = codigo_id;
+    public void setId(Long id) {
+        this.id = id;
     }
     public int getCodigo_setor() {
         return codigo_setor;

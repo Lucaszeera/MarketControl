@@ -64,11 +64,11 @@ public class ResponsavelController {
         var responsavelEncontrado = listaDeResponsaveis.stream().filter(e -> e.getId().equals(id)).findFirst();
 
         if(responsavelEncontrado.isEmpty()){
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         listaDeResponsaveis.remove(responsavelEncontrado.get());
-        responsavel.setId(listaDeResponsaveis.size() + 1l);
+        responsavel.setId(id);
         listaDeResponsaveis.add(responsavel);
 
         return ResponseEntity.ok(responsavel);
@@ -76,7 +76,7 @@ public class ResponsavelController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Responsavel> delete(@PathVariable Long id){
         log.info("Excluindo o responsavel com o id: " + id);
 
         var responsavelEncontrado = listaDeResponsaveis.stream().filter(p -> p.getId().equals(id)).findFirst();

@@ -64,11 +64,11 @@ public class EstabelecimentoController {
         var estabelecimentoEncontrado = listaDeEstabelecimentos.stream().filter(e -> e.getId().equals(id)).findFirst();
 
         if(estabelecimentoEncontrado.isEmpty()){
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         listaDeEstabelecimentos.remove(estabelecimentoEncontrado.get());
-        estabelecimento.setId(listaDeEstabelecimentos.size() + 1l);
+        estabelecimento.setId(id);
         listaDeEstabelecimentos.add(estabelecimento);
 
         return ResponseEntity.ok(estabelecimento);
@@ -76,9 +76,8 @@ public class EstabelecimentoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Estabelecimento> delete(@PathVariable Long id){
         log.info("Excluindo o Estabelecimento com o id: " + id);
-
         var estabelecimentoEncontrado = listaDeEstabelecimentos.stream().filter(p -> p.getId().equals(id)).findFirst();
 
         if( estabelecimentoEncontrado.isEmpty()){

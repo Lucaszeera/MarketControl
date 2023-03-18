@@ -67,13 +67,13 @@ public class ProdutoController {
         }
 
         listaDeProdutos.remove(produtoEncontrado.get());
-        produto.setId(produtoEncontrado.get().getId());
+        produto.setId(id);
         listaDeProdutos.add(produto);
         return ResponseEntity.ok(produto);
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Produto> delete(@PathVariable Long id){
         log.info("Excluindo o Produto com o id: " + id);
 
         var produtoEncontrado = listaDeProdutos.stream().filter(p -> p.getId().equals(id)).findFirst();

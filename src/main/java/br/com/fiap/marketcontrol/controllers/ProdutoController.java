@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.models.Produto;
+import br.com.fiap.marketcontrol.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/api/produto")
@@ -24,13 +27,14 @@ public class ProdutoController {
 
     Logger log = LoggerFactory.getLogger(Produto.class);
 
-    List<Produto> listaDeProdutos = new ArrayList<>();
+    @Autowired
+    ProdutoRepository produtoRepository;
 
 
     @GetMapping
     public List<Produto> getAll(){
         log.info("Retornando uma lista de produtos.");
-        return listaDeProdutos;
+        return produtoRepository.findAll();
     }
 
 
@@ -38,10 +42,10 @@ public class ProdutoController {
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
 
-        var produtoEncontrado = listaDeProdutos.stream().filter(p -> p.getId().equals(id)).findFirst();
+        var produtoEncontrado = produtoRepository.findById(id);    
 
         if(produtoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(produtoEncontrado.get());
@@ -50,8 +54,8 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<Produto> create(@RequestBody Produto produto){
         log.info("Adicionando um produto.");
-        produto.setId(listaDeProdutos.size() + 1l);
-        listaDeProdutos.add(produto);
+
+        produtoRepository.save(produto);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
     }
@@ -60,15 +64,14 @@ public class ProdutoController {
     public ResponseEntity<Produto> update(@RequestBody Produto produto, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        var produtoEncontrado = listaDeProdutos.stream().filter(p -> p.getId().equals(id)).findFirst();
+        var produtoEncontrado = produtoRepository.findById(id);
         
         if(produtoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
-
-        listaDeProdutos.remove(produtoEncontrado.get());
         produto.setId(id);
-        listaDeProdutos.add(produto);
+        produtoRepository.save(produto);
+
         return ResponseEntity.ok(produto);
     }
     
@@ -76,15 +79,15 @@ public class ProdutoController {
     public ResponseEntity<Produto> delete(@PathVariable Long id){
         log.info("Excluindo o Produto com o id: " + id);
 
-        var produtoEncontrado = listaDeProdutos.stream().filter(p -> p.getId().equals(id)).findFirst();
+        var produtoEncontrado = produtoRepository.findById(id);
 
         if( produtoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
 
-        listaDeProdutos.remove(produtoEncontrado.get());
+        produtoRepository.delete(produtoEncontrado.get());
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
     
 }

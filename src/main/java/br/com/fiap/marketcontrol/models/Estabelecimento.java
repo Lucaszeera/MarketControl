@@ -1,8 +1,19 @@
 package br.com.fiap.marketcontrol.models;
 
+import org.springframework.data.repository.cdi.Eager;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Estabelecimento {
-    String nome;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    
+    String nome;
     String cnpj;
     String nomeProprietario;
     String cpfProprietario;
@@ -13,6 +24,9 @@ public class Estabelecimento {
         this.cnpj = cnpj;
         this.nomeProprietario = nomeProprietario;
         this.cpfProprietario = cpfProprietario;
+    }
+
+    protected Estabelecimento() {
     }
 
     public String getNome() {

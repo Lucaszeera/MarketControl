@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.models.Estabelecimento;
+import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 
 @RestController
 @RequestMapping("/api/estabelecimento")
@@ -24,24 +26,24 @@ public class EstabelecimentoController {
     
     Logger log = LoggerFactory.getLogger(EstabelecimentoController.class);
 
-    List<Estabelecimento> listaDeEstabelecimentos = new ArrayList<>();
-
+    @Autowired
+    EstabelecimentoRepository estabelecimentoRepository;
 
     @GetMapping
     public List<Estabelecimento> getAll(){
         log.info("Retornando todos os estabelecimentos");
 
-        return listaDeEstabelecimentos;
+        return estabelecimentoRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Estabelecimento> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
 
-        var estabelecimentoEncontrado = listaDeEstabelecimentos.stream().filter(p -> p.getId().equals(id)).findFirst();
+        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
 
         if(estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(estabelecimentoEncontrado.get());
@@ -51,8 +53,7 @@ public class EstabelecimentoController {
     public ResponseEntity<Estabelecimento> create(@RequestBody Estabelecimento estabelecimento){
         log.info("Adicionando um estabelecimento.");
         
-        estabelecimento.setId(listaDeEstabelecimentos.size() + 1l);
-        listaDeEstabelecimentos.add(estabelecimento);
+        estabelecimentoRepository.save(estabelecimento);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimento);
     }
@@ -61,15 +62,14 @@ public class EstabelecimentoController {
     public ResponseEntity<Estabelecimento> update(@RequestBody Estabelecimento estabelecimento, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        var estabelecimentoEncontrado = listaDeEstabelecimentos.stream().filter(e -> e.getId().equals(id)).findFirst();
+        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
 
         if(estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
 
-        listaDeEstabelecimentos.remove(estabelecimentoEncontrado.get());
         estabelecimento.setId(id);
-        listaDeEstabelecimentos.add(estabelecimento);
+        estabelecimentoRepository.save(estabelecimento);
 
         return ResponseEntity.ok(estabelecimento);
 
@@ -78,15 +78,15 @@ public class EstabelecimentoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Estabelecimento> delete(@PathVariable Long id){
         log.info("Excluindo o Estabelecimento com o id: " + id);
-        var estabelecimentoEncontrado = listaDeEstabelecimentos.stream().filter(p -> p.getId().equals(id)).findFirst();
+        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
 
         if( estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
 
-        listaDeEstabelecimentos.remove(estabelecimentoEncontrado.get());
+        estabelecimentoRepository.delete(estabelecimentoEncontrado.get());
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
     
 }

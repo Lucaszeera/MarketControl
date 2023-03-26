@@ -2,21 +2,34 @@ package br.com.fiap.marketcontrol.models;
 
 import java.util.Calendar;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Responsavel {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
     String nome;
     String cpf;
     Calendar dataAdmissao;
-    Long id;
-    int codigo_setor;
+    int codigoSetor;
     
-    public Responsavel(String nome, String cpf, Calendar dataAdmissao, Long id, int codigo_setor) {
+    public Responsavel( Long id, String nome, String cpf, Calendar dataAdmissao, int codigoSetor) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataAdmissao = dataAdmissao;
-        this.id = id;
-        this.codigo_setor = codigo_setor;
+        this.codigoSetor = codigoSetor;
     }
+
+    protected Responsavel() {
+    }
+
     public String getNome() {
         return nome;
     }
@@ -41,11 +54,11 @@ public class Responsavel {
     public void setId(Long id) {
         this.id = id;
     }
-    public int getCodigo_setor() {
-        return codigo_setor;
+    public int getCodigoSetor() {
+        return codigoSetor;
     }
-    public void setCodigo_setor(int codigo_setor) {
-        this.codigo_setor = codigo_setor;
+    public void setCodigoSetor(int codigoSetor) {
+        this.codigoSetor = codigoSetor;
     }
 
     

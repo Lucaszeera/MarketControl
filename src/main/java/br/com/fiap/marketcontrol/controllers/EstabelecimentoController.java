@@ -21,7 +21,7 @@ import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 
 @RestController
-@RequestMapping("/api/estabelecimento")
+@RequestMapping("marketcontrol/api/estabelecimento")
 public class EstabelecimentoController {
     
     Logger log = LoggerFactory.getLogger(EstabelecimentoController.class);

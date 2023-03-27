@@ -43,16 +43,11 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "valor" : 100.00,
-    "categoria":{
-        "categoria_id" : 1,
-        "nome_categoria": "limpeza"
-        }
-    "data_cadastro" : "2023-01-27",   
-    "data_validade" : "2023-10-21",
-    "quantidade" : 15,
-    "descricao" : 35,
-    "produto_id" : 1
+	"valor": 12.00,
+	"dataCadastro": "2023-03-14",
+	"dataValidade": "2023-06-14",
+	"quantidade": 201,
+	"descricao": "produto numero1"
 }
 ```
 
@@ -72,14 +67,12 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "valor" : 100.00,
-    "categoria" : {
-        "categoria_id" : 1,
-        "nome_categoria" : "limpeza"
-    }
-    "nome" : "Sabao OMO"
-    "data_cadastro" : "2023-10-7"
-    
+    "id" : 1,
+	"descricao": "produto numero1"
+	"dataCadastro": "2023-03-14",
+	"dataValidade": "2023-06-14",
+	"valor": 12.00,
+	"quantidade": 201,
 }
 ```
 
@@ -107,11 +100,9 @@ Sistema de controle de estoque de comércios.
 ```js
 {
     "nome" : "Mercadinho do Calvo Roger",
-    "id" : 2,
-    "nome_categoria": 
-    "bebidas e alimenticios",
+    "nomeCategoria": "bebidas e alimenticios",
     "cnpj" : "32.480.846/0001-62",
-    "nomeProprietario" : "Roger",
+    "nomeProprietario" : "alobar",
     "cpfProprietario" : "010-202-330.04"
 }
 ```
@@ -126,19 +117,19 @@ Sistema de controle de estoque de comércios.
 ---
 
 ## Analise de estoque
-`GET` /marketcontrol/api/estoque/analise
+`GET` /marketcontrol/api/produto
 
 **Exemplo de corpo do request**
 
 ```js
 {
     "id" : 1, 
-    "nome_produto" : "Sabao Tixan",
+    "descricao" : "Sabao Tixan",
     "categoria":{
         "categoria_id" : 2,
         "nome_categoria" : "enlatado"
         },
-    "valor_produto" : 10.00,
+    "valor" : 10.00,
     "quantidade" : 10
 }
 ```
@@ -165,14 +156,10 @@ Sistema de controle de estoque de comércios.
 
 ```js
 {
-    "nome" : "Jose Carlos Ferreira",    
-    "id" : 120,
-    "cpf" : 111.111.111-01,
-    "data_admissao" : 2023-01-12,
-    "setor" : {
-        "codigo_setor" : 240
-        "nome_setor" : "frutas"
-        }
+    "nome" : "Mercadinho do Calvo",
+    "cpf" : "111.777.345-06",
+    "dataAdmissao" : "2020-12-23",
+    "codigoSetor" : 4
 }
 ```
 
@@ -193,9 +180,9 @@ Sistema de controle de estoque de comércios.
 ```js
 {
     "nome" : "Mario Kart De Assis",    
-    "id" : 120,
-    "cpf" : 111.777.345-06,
-    "data_admissao" : 2023-01-12,
+    "id" : 1,
+    "cpf" : "111.777.345-06",
+    "dataAdmissao" : "2023-01-12",
     "setor" : {
         "codigo_setor" : 240,
         "nome_setor" : "frutas"

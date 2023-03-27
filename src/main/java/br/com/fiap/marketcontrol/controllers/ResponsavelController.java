@@ -21,7 +21,7 @@ import br.com.fiap.marketcontrol.models.Responsavel;
 import br.com.fiap.marketcontrol.repository.ResponsavelRepository;
 
 @RestController
-@RequestMapping("/api/responsavel")
+@RequestMapping("marketcontrol/api/responsavel")
 public class ResponsavelController {
     
     Logger log = LoggerFactory.getLogger(ResponsavelController.class);

@@ -22,7 +22,7 @@ import br.com.fiap.marketcontrol.models.Produto;
 import br.com.fiap.marketcontrol.repository.ProdutoRepository;
 
 @RestController
-@RequestMapping("/api/produto")
+@RequestMapping("marketcontrol/api/produto")
 public class ProdutoController {
 
     Logger log = LoggerFactory.getLogger(Produto.class);

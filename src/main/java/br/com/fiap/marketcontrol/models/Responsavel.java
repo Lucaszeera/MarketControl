@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Responsavel {
@@ -15,6 +17,7 @@ public class Responsavel {
     Long id;
 
     String nome;
+    @NotBlank @NotNull
     String cpf;
     Calendar dataAdmissao;
     int codigoSetor;
@@ -61,5 +64,12 @@ public class Responsavel {
         this.codigoSetor = codigoSetor;
     }
 
+    @Override
+    public String toString() {
+        return "Responsavel [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", dataAdmissao=" + dataAdmissao
+                + ", codigoSetor=" + codigoSetor + "]";
+    }
+
+    
     
 }

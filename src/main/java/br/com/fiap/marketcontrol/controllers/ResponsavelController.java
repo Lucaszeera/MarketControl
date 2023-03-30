@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.models.Responsavel;
 import br.com.fiap.marketcontrol.repository.ResponsavelRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("marketcontrol/api/responsavel")
@@ -50,7 +51,7 @@ public class ResponsavelController {
     }
 
     @PostMapping
-    public ResponseEntity<Responsavel> create(@RequestBody Responsavel responsavel){
+    public ResponseEntity<Responsavel> create(@RequestBody @Valid Responsavel responsavel){
         log.info("Adicionando um responsavel.");
         
         responsavelRepository.save(responsavel);

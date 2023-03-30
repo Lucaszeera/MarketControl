@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("marketcontrol/api/estabelecimento")
@@ -50,8 +52,10 @@ public class EstabelecimentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Estabelecimento> create(@RequestBody Estabelecimento estabelecimento){
+    public ResponseEntity<Estabelecimento> create(@RequestBody @Valid Estabelecimento estabelecimento){
+        // if ( result.hasErrors()) return ResponseEntity.badRequest().build();
         log.info("Adicionando um estabelecimento.");
+
         
         estabelecimentoRepository.save(estabelecimento);
 

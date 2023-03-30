@@ -7,18 +7,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @NotNull @Min(value=0)
     BigDecimal valor;
+    @NotNull
     Calendar dataCadastro;
     Calendar dataValidade;
     int quantidade;
+    @NotBlank
     String descricao;
 
     public Produto(BigDecimal valor, Long id, Calendar dataCadastro, Calendar dataValidade, int quantidade,
@@ -81,5 +85,13 @@ public class Produto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "Produto [id=" + id + ", valor=" + valor + ", dataCadastro=" + dataCadastro + ", dataValidade="
+                + dataValidade + ", quantidade=" + quantidade + ", descricao=" + descricao + "]";
+    }
+
+    
 
 }

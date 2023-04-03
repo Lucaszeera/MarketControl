@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Produto;
-import br.com.fiap.marketcontrol.models.RestError;
 import br.com.fiap.marketcontrol.repository.ProdutoRepository;
 import jakarta.validation.Valid;
 
@@ -43,18 +42,14 @@ public class ProdutoController {
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
 
-        var produtoEncontrado = produtoRepository.findById(id);    
+        var produto = produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));    
 
-        if(produtoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
 
-        return ResponseEntity.ok(produtoEncontrado.get());
+        return ResponseEntity.ok(produto);
     }
 
     @PostMapping
-    public ResponseEntity<Produto> create(@RequestBody @Valid Produto produto, BindingResult result){
-         if ( result.hasErrors()) return ResponseEntity.badRequest().body(new RestError("Total de erros = " + result.getErrorCount()));
+    public ResponseEntity<Produto> create(@RequestBody @Valid Produto produto){
         log.info("Adicionando um produto.");
 
         produtoRepository.save(produto);
@@ -63,14 +58,11 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> update(@RequestBody Produto produto, @PathVariable Long id){
+    public ResponseEntity<Produto> update(@RequestBody @Valid Produto produto, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        var produtoEncontrado = produtoRepository.findById(id);
-        
-        if(produtoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
+        produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));   
+
         produto.setId(id);
         produtoRepository.save(produto);
 
@@ -81,13 +73,9 @@ public class ProdutoController {
     public ResponseEntity<Produto> delete(@PathVariable Long id){
         log.info("Excluindo o Produto com o id: " + id);
 
-        var produtoEncontrado = produtoRepository.findById(id);
+        var produto = produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));   
 
-        if( produtoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        produtoRepository.delete(produtoEncontrado.get());
+        produtoRepository.delete(produto);
 
         return ResponseEntity.noContent().build();
     }

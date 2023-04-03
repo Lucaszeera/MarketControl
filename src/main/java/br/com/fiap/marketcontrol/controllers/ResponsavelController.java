@@ -1,6 +1,5 @@
 package br.com.fiap.marketcontrol.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Responsavel;
 import br.com.fiap.marketcontrol.repository.ResponsavelRepository;
 import jakarta.validation.Valid;
@@ -41,13 +41,9 @@ public class ResponsavelController {
     public ResponseEntity<Responsavel> getById(@PathVariable Long id){
         log.info("Pegando um responsável pelo id: " + id);
 
-        var responsavelEncontrado = responsavelRepository.findById(id);
+        var responsavel = responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
 
-        if(responsavelEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(responsavelEncontrado.get());
+        return ResponseEntity.ok(responsavel);
     }
 
     @PostMapping
@@ -60,14 +56,11 @@ public class ResponsavelController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Responsavel> update(@RequestBody Responsavel responsavel, @PathVariable Long id){
+    public ResponseEntity<Responsavel> update(@RequestBody @Valid Responsavel responsavel, @PathVariable Long id){
         log.info("Atualizando o responsavel com id: " + id);
 
-        var responsavelEncontrado = responsavelRepository.findById(id);
+        responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
 
-        if(responsavelEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
         responsavel.setId(id);
         responsavelRepository.save(responsavel);
 
@@ -79,13 +72,9 @@ public class ResponsavelController {
     public ResponseEntity<Responsavel> delete(@PathVariable Long id){
         log.info("Excluindo o responsavel com o id: " + id);
 
-        var responsavelEncontrado = responsavelRepository.findById(id);
+        var responsavel = responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
 
-        if( responsavelEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        responsavelRepository.delete(responsavelEncontrado.get());
+        responsavelRepository.delete(responsavel);
 
         return ResponseEntity.noContent().build();
     }

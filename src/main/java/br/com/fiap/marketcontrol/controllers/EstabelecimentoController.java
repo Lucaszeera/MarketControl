@@ -1,6 +1,5 @@
 package br.com.fiap.marketcontrol.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import jakarta.validation.Valid;
@@ -42,20 +41,14 @@ public class EstabelecimentoController {
     public ResponseEntity<Estabelecimento> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
 
-        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
+        var estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
 
-        if(estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(estabelecimentoEncontrado.get());
+        return ResponseEntity.ok(estabelecimento);
     }
 
     @PostMapping
     public ResponseEntity<Estabelecimento> create(@RequestBody @Valid Estabelecimento estabelecimento){
-        // if ( result.hasErrors()) return ResponseEntity.badRequest().build();
         log.info("Adicionando um estabelecimento.");
-
         
         estabelecimentoRepository.save(estabelecimento);
 
@@ -63,14 +56,10 @@ public class EstabelecimentoController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Estabelecimento> update(@RequestBody Estabelecimento estabelecimento, @PathVariable Long id){
+    public ResponseEntity<Estabelecimento> update(@RequestBody @Valid Estabelecimento estabelecimento, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
-
-        if(estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
+        estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
 
         estabelecimento.setId(id);
         estabelecimentoRepository.save(estabelecimento);
@@ -82,13 +71,9 @@ public class EstabelecimentoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Estabelecimento> delete(@PathVariable Long id){
         log.info("Excluindo o Estabelecimento com o id: " + id);
-        var estabelecimentoEncontrado = estabelecimentoRepository.findById(id);
+        var estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
 
-        if( estabelecimentoEncontrado.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-
-        estabelecimentoRepository.delete(estabelecimentoEncontrado.get());
+        estabelecimentoRepository.delete(estabelecimento);
 
         return ResponseEntity.noContent().build();
     }

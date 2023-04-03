@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Produto {
@@ -21,8 +22,9 @@ public class Produto {
     @NotNull
     Calendar dataCadastro;
     Calendar dataValidade;
+    @NotNull
     int quantidade;
-    @NotBlank
+    @NotBlank @Size(min = 3, max = 40)
     String descricao;
 
     public Produto(BigDecimal valor, Long id, Calendar dataCadastro, Calendar dataValidade, int quantidade,

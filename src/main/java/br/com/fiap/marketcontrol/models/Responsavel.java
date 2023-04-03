@@ -15,11 +15,13 @@ public class Responsavel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @NotBlank
     String nome;
-    @NotBlank @NotNull
+    @NotBlank
     String cpf;
+    @NotNull
     Calendar dataAdmissao;
+    @NotNull
     int codigoSetor;
     
     public Responsavel( Long id, String nome, String cpf, Calendar dataAdmissao, int codigoSetor) {

@@ -5,20 +5,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Estabelecimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @NotBlank
     String nome;
     @NotBlank
-    @NotNull
     String cnpj;
+    @NotBlank
     String nomeProprietario;
     @NotBlank
-    @NotNull
     String cpfProprietario;
 
     public Estabelecimento(String nome, Long id, String cnpj, String nomeProprietario, String cpfProprietario) {

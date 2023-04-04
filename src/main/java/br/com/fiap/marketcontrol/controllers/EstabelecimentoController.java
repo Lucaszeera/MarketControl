@@ -41,9 +41,7 @@ public class EstabelecimentoController {
     public ResponseEntity<Estabelecimento> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
 
-        var estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
-
-        return ResponseEntity.ok(estabelecimento);
+        return ResponseEntity.ok(getEstabelecimento(id));
     }
 
     @PostMapping
@@ -59,7 +57,7 @@ public class EstabelecimentoController {
     public ResponseEntity<Estabelecimento> update(@RequestBody @Valid Estabelecimento estabelecimento, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
+        getEstabelecimento(id);
 
         estabelecimento.setId(id);
         estabelecimentoRepository.save(estabelecimento);
@@ -71,11 +69,14 @@ public class EstabelecimentoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Estabelecimento> delete(@PathVariable Long id){
         log.info("Excluindo o Estabelecimento com o id: " + id);
-        var estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
 
-        estabelecimentoRepository.delete(estabelecimento);
+        estabelecimentoRepository.delete(getEstabelecimento(id));
 
         return ResponseEntity.noContent().build();
+    }
+
+    private Estabelecimento getEstabelecimento(Long id) {
+        return estabelecimentoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Estabelecimento não encontrado."));
     }
     
 }

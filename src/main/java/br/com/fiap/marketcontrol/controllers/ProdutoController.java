@@ -41,11 +41,8 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
-
-        var produto = produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));    
-
-
-        return ResponseEntity.ok(produto);
+    
+        return ResponseEntity.ok(getProduto(id));
     }
 
     @PostMapping
@@ -61,7 +58,7 @@ public class ProdutoController {
     public ResponseEntity<Produto> update(@RequestBody @Valid Produto produto, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
 
-        produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));   
+        getProduto(id);   
 
         produto.setId(id);
         produtoRepository.save(produto);
@@ -73,11 +70,16 @@ public class ProdutoController {
     public ResponseEntity<Produto> delete(@PathVariable Long id){
         log.info("Excluindo o Produto com o id: " + id);
 
-        var produto = produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));   
+        var produto = getProduto(id);   
 
         produtoRepository.delete(produto);
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    private Produto getProduto(Long id) {
+        return produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));
     }
     
 }

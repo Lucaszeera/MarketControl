@@ -41,9 +41,7 @@ public class ResponsavelController {
     public ResponseEntity<Responsavel> getById(@PathVariable Long id){
         log.info("Pegando um responsável pelo id: " + id);
 
-        var responsavel = responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
-
-        return ResponseEntity.ok(responsavel);
+        return ResponseEntity.ok(getResponsavel(id));
     }
 
     @PostMapping
@@ -59,7 +57,7 @@ public class ResponsavelController {
     public ResponseEntity<Responsavel> update(@RequestBody @Valid Responsavel responsavel, @PathVariable Long id){
         log.info("Atualizando o responsavel com id: " + id);
 
-        responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
+        getResponsavel(id);
 
         responsavel.setId(id);
         responsavelRepository.save(responsavel);
@@ -72,11 +70,13 @@ public class ResponsavelController {
     public ResponseEntity<Responsavel> delete(@PathVariable Long id){
         log.info("Excluindo o responsavel com o id: " + id);
 
-        var responsavel = responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
-
-        responsavelRepository.delete(responsavel);
+        responsavelRepository.delete(getResponsavel(id));
 
         return ResponseEntity.noContent().build();
+    }
+
+    private Responsavel getResponsavel(Long id) {
+        return responsavelRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Responsável não encontrado."));
     }
 
 }

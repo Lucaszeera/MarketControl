@@ -3,10 +3,13 @@ package br.com.fiap.marketcontrol.models;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -20,16 +23,19 @@ import lombok.Data;
 public class Produto {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @NotNull @Min(value=0)
-    BigDecimal valor;
-    @NotNull
-    Calendar dataCadastro;
+    private BigDecimal valor;
+    @NotNull @JsonProperty(value = "data_cadastro")
+    private Calendar dataCadastro;
+    @NotNull @JsonProperty(value = "data_validade")
     Calendar dataValidade;
     @NotNull
-    int quantidade;
-    @NotBlank @Size(min = 3, max = 40)
-    String descricao;
+    private int quantidade;
+    @NotBlank @Size(min = 3, max = 50)
+    private String descricao;
+    @NotNull @ManyToOne
+    private Estabelecimento estabelecimento;
 
     public Produto() {
     }

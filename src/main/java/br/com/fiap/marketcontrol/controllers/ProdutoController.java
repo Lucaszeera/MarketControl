@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
+import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.models.Produto;
+import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import br.com.fiap.marketcontrol.repository.ProdutoRepository;
 import jakarta.validation.Valid;
 
@@ -29,6 +31,9 @@ public class ProdutoController {
 
     @Autowired
     ProdutoRepository produtoRepository;
+
+    @Autowired
+    EstabelecimentoRepository estabelecimentoRepository;
 
 
     @GetMapping
@@ -49,37 +54,40 @@ public class ProdutoController {
     public ResponseEntity<Produto> create(@RequestBody @Valid Produto produto){
         log.info("Adicionando um produto.");
 
+        produto.setEstabelecimento(getEstabelecimento(produto));
         produtoRepository.save(produto);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
     }
-
+    
     @PutMapping("/{id}")
     public ResponseEntity<Produto> update(@RequestBody @Valid Produto produto, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
-
+        
         getProduto(id);   
-
+        
         produto.setId(id);
         produtoRepository.save(produto);
-
+        
         return ResponseEntity.ok(produto);
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<Produto> delete(@PathVariable Long id){
         log.info("Excluindo o Produto com o id: " + id);
-
+        
         var produto = getProduto(id);   
-
+        
         produtoRepository.delete(produto);
 
         return ResponseEntity.noContent().build();
     }
-
-
+    
     private Produto getProduto(Long id) {
         return produtoRepository.findById(id).orElseThrow(() -> new RestNotFoundException("Produto não encontrado."));
+    }
+    private Estabelecimento getEstabelecimento(Produto produto) {
+        return estabelecimentoRepository.findById(produto.getEstabelecimento().getId()).get();
     }
     
 }

@@ -67,10 +67,11 @@ public class FuncionarioController {
         getFuncionario(id);
 
         funcionario.setId(id);
+        funcionario.setEstabelecimento(getEstabelecimento(funcionario));
+
         funcionarioRepository.save(funcionario);
         
         return ResponseEntity.ok(funcionario);
-        
     }
     
     @DeleteMapping("/{id}")

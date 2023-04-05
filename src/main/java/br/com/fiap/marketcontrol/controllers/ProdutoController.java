@@ -65,8 +65,10 @@ public class ProdutoController {
         log.info("Atualizando o produto com id: " + id);
         
         getProduto(id);   
-        
+
         produto.setId(id);
+        produto.setEstabelecimento(getEstabelecimento(produto));
+
         produtoRepository.save(produto);
         
         return ResponseEntity.ok(produto);

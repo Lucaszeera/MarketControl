@@ -39,7 +39,7 @@ public class EstabelecimentoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Estabelecimento> getById(@PathVariable Long id){
-        log.info("Pegando um produto pelo id: " + id);
+        log.info("Pegando um produto pelo id: " + id); 
 
         return ResponseEntity.ok(getEstabelecimento(id));
     }

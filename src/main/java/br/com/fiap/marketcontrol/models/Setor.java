@@ -8,9 +8,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 @Data
+@AllArgsConstructor
 @Entity
 @Table(name = "MC_Setor")
 public class Setor {

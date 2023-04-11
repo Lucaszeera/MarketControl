@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,27 +17,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("marketcontrol/api/estabelecimento")
 public class EstabelecimentoController {
-    
-    Logger log = LoggerFactory.getLogger(EstabelecimentoController.class);
 
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
 
     @GetMapping
-    public List<Estabelecimento> getAll(){
+    public Page<Estabelecimento> getAll(@RequestParam(required = false) String nome, @PageableDefault(size = 5) Pageable pageable){
         log.info("Retornando todos os estabelecimentos");
-
-        return estabelecimentoRepository.findAll();
+        if(nome == null) return estabelecimentoRepository.findAll(pageable);
+        
+        return estabelecimentoRepository.findByNomeContaining(nome, pageable);
     }
 
     @GetMapping("/{id}")

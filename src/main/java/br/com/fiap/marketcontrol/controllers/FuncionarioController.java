@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
@@ -22,12 +26,12 @@ import br.com.fiap.marketcontrol.models.Funcionario;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import br.com.fiap.marketcontrol.repository.FuncionarioRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("marketcontrol/api/funcionario")
 public class FuncionarioController {
-    
-    Logger log = LoggerFactory.getLogger(FuncionarioController.class);
 
     @Autowired
     FuncionarioRepository funcionarioRepository;
@@ -36,10 +40,11 @@ public class FuncionarioController {
     EstabelecimentoRepository estabelecimentoRepository;
 
     @GetMapping
-    public List<Funcionario> getAll(){
-        log.info("Retornando todos os funcionarios");
+    public Page<Funcionario> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
+        log.info("Retornando uma página de funcionarios");
+        if(estabelecimento == null) return funcionarioRepository.findAll(pageable);
 
-        return funcionarioRepository.findAll();
+        return funcionarioRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
     }
 
     @GetMapping("/{id}")

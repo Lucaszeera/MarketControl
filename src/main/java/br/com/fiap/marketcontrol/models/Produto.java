@@ -16,9 +16,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "MC_Produto")
@@ -40,6 +42,5 @@ public class Produto {
     private Estabelecimento estabelecimento;
 
     public Produto() {
-    }
-
+    }  
 }

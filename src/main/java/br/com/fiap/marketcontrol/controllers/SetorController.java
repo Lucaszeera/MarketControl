@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,21 +17,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Estabelecimento;
 import br.com.fiap.marketcontrol.models.Setor;
-import br.com.fiap.marketcontrol.models.Setor;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import br.com.fiap.marketcontrol.repository.SetorRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("marketcontrol/api/setor")
 public class SetorController {
-
-    Logger log = LoggerFactory.getLogger(Setor.class);
 
     @Autowired
     SetorRepository setorRepository;
@@ -38,9 +41,11 @@ public class SetorController {
 
 
     @GetMapping
-    public List<Setor> getAll(){
-        log.info("Retornando uma lista de setores.");
-        return setorRepository.findAll();
+    public Page<Setor> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
+        log.info("Retornando uma página de setores.");
+        if(estabelecimento == null) return setorRepository.findAll(pageable);
+        
+        return setorRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
     }
 
 

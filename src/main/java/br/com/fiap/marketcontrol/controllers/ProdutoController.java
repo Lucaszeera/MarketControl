@@ -1,10 +1,14 @@
 package br.com.fiap.marketcontrol.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
@@ -22,12 +27,12 @@ import br.com.fiap.marketcontrol.models.Produto;
 import br.com.fiap.marketcontrol.repository.EstabelecimentoRepository;
 import br.com.fiap.marketcontrol.repository.ProdutoRepository;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("marketcontrol/api/produto")
 public class ProdutoController {
-
-    Logger log = LoggerFactory.getLogger(Produto.class);
 
     @Autowired
     ProdutoRepository produtoRepository;
@@ -37,9 +42,11 @@ public class ProdutoController {
 
 
     @GetMapping
-    public List<Produto> getAll(){
-        log.info("Retornando uma lista de produtos.");
-        return produtoRepository.findAll();
+    public Page<Produto> getAll(@RequestParam(required = false) BigDecimal valor, @PageableDefault(size = 5) Pageable pageable){
+        log.info("Retornando uma página de produtos.");
+        if(valor == null) return produtoRepository.findAll(pageable);
+
+        return produtoRepository.findByValorContaining(valor, pageable);
     }
 
 

@@ -1,13 +1,10 @@
 package br.com.fiap.marketcontrol.controllers;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.marketcontrol.exceptions.RestNotFoundException;
 import br.com.fiap.marketcontrol.models.Estabelecimento;
@@ -41,33 +39,39 @@ public class SetorController {
 
 
     @GetMapping
-    public Page<Setor> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
+    public Page<EntityModel<Setor>> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
         log.info("Retornando uma página de setores.");
-        if(estabelecimento == null) return setorRepository.findAll(pageable);
-        
-        return setorRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
+        Page<Setor> setores;
+
+        setores = (estabelecimento == null) ? 
+        setorRepository.findAll(pageable) : 
+        setorRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
+
+        return setores.map((setor) ->
+        setor.toModel());
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Setor> getById(@PathVariable Long id){
+    public EntityModel<Setor> getById(@PathVariable Long id){
         log.info("Pegando um setor pelo id: " + id);
-    
-        return ResponseEntity.ok(getSetor(id));
+            var setor = setorRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "setor nao encontrada")); 
+
+        return setor.toModel();
     }
 
     @PostMapping
-    public ResponseEntity<Setor> create(@RequestBody @Valid Setor setor){
+    public ResponseEntity<EntityModel<Setor>> create(@RequestBody @Valid Setor setor){
         log.info("Adicionando um setor.");
 
         setor.setEstabelecimento(getEstabelecimento(setor));
         setorRepository.save(setor);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(setor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(setor.toModel());
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Setor> update(@RequestBody @Valid Setor setor, @PathVariable Long id){
+    public EntityModel<Setor> update(@RequestBody @Valid Setor setor, @PathVariable Long id){
         log.info("Atualizando o setor com id: " + id);
         
         getSetor(id);   
@@ -75,7 +79,7 @@ public class SetorController {
         setor.setId(id);
         setorRepository.save(setor);
         
-        return ResponseEntity.ok(setor);
+        return setor.toModel();
     }
     
     @DeleteMapping("/{id}")

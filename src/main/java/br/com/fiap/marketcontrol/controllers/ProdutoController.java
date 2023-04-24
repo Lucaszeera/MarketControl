@@ -1,14 +1,11 @@
 package br.com.fiap.marketcontrol.controllers;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,33 +39,39 @@ public class ProdutoController {
 
 
     @GetMapping
-    public Page<Produto> getAll(@RequestParam(required = false) BigDecimal valor, @PageableDefault(size = 5) Pageable pageable){
+    public Page<EntityModel<Produto>> getAll(@RequestParam(required = false) BigDecimal valor, @PageableDefault(size = 5) Pageable pageable){
         log.info("Retornando uma página de produtos.");
-        if(valor == null) return produtoRepository.findAll(pageable);
+        Page<Produto> produtos;
 
-        return produtoRepository.findByValorContaining(valor, pageable);
+        produtos = (valor == null) ? 
+            produtoRepository.findAll(pageable) :
+            produtoRepository.findByValorContaining(valor, pageable);
+
+
+        return produtos.map((produto) ->
+        produto.toModel());
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> getById(@PathVariable Long id){
+    public EntityModel<Produto> getById(@PathVariable Long id){
         log.info("Pegando um produto pelo id: " + id);
     
-        return ResponseEntity.ok(getProduto(id));
+        return getProduto(id).toModel();
     }
 
     @PostMapping
-    public ResponseEntity<Produto> create(@RequestBody @Valid Produto produto){
+    public ResponseEntity<EntityModel<Produto>> create(@RequestBody @Valid Produto produto){
         log.info("Adicionando um produto.");
 
         produto.setEstabelecimento(getEstabelecimento(produto));
         produtoRepository.save(produto);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(produto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produto.toModel());
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> update(@RequestBody @Valid Produto produto, @PathVariable Long id){
+    public EntityModel<Produto> update(@RequestBody @Valid Produto produto, @PathVariable Long id){
         log.info("Atualizando o produto com id: " + id);
         
         getProduto(id);   
@@ -78,7 +81,7 @@ public class ProdutoController {
 
         produtoRepository.save(produto);
         
-        return ResponseEntity.ok(produto);
+        return produto.toModel();
     }
     
     @DeleteMapping("/{id}")

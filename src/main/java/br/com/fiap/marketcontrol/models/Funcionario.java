@@ -2,9 +2,16 @@ package br.com.fiap.marketcontrol.models;
 
 import java.util.Calendar;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import br.com.fiap.marketcontrol.controllers.FuncionarioController;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,5 +47,13 @@ public class Funcionario {
 
     public Funcionario() {
     }   
-    
+
+    public EntityModel<Funcionario> toModel(){
+        return EntityModel.of(
+        this,
+        linkTo(methodOn(FuncionarioController.class).getById(id)).withSelfRel(),
+        linkTo(methodOn(FuncionarioController.class).getById(this.getEstabelecimento().getId())).withRel("estabelecimento"),
+        linkTo(methodOn(FuncionarioController.class).delete(id)).withRel("delete"),
+        linkTo(methodOn(FuncionarioController.class).getAll(null, Pageable.unpaged())).withRel("all"));
+    }
 }

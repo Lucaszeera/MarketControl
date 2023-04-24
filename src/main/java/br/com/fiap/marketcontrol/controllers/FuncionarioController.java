@@ -1,13 +1,10 @@
 package br.com.fiap.marketcontrol.controllers;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,33 +37,38 @@ public class FuncionarioController {
     EstabelecimentoRepository estabelecimentoRepository;
 
     @GetMapping
-    public Page<Funcionario> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
+    public Page<EntityModel<Funcionario>> getAll(@RequestParam(required = false) Estabelecimento estabelecimento, @PageableDefault(size = 5) Pageable pageable){
         log.info("Retornando uma página de funcionarios");
-        if(estabelecimento == null) return funcionarioRepository.findAll(pageable);
+        Page<Funcionario> funcionarios;
+        
+        funcionarios = (estabelecimento == null) ? 
+        funcionarioRepository.findAll(pageable) : funcionarioRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
 
-        return funcionarioRepository.findByEstabelecimentoContaining(estabelecimento, pageable);
+        return funcionarios.map((funcionario) -> 
+            funcionario.toModel());
+        
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> getById(@PathVariable Long id){
+    public EntityModel<Funcionario> getById(@PathVariable Long id){
         log.info("Pegando um funcionario pelo id: " + id);
 
-        return ResponseEntity.ok(getFuncionario(id));
+        return getFuncionario(id).toModel();
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> create(@RequestBody @Valid Funcionario funcionario){
+    public ResponseEntity<EntityModel<Funcionario>> create(@RequestBody @Valid Funcionario funcionario){
         log.info("Adicionando um funcionario.");
         
         funcionario.setEstabelecimento(getEstabelecimento(funcionario));
         funcionarioRepository.save(funcionario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(funcionario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(funcionario.toModel());
     }
 
     
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> update(@RequestBody @Valid Funcionario funcionario, @PathVariable Long id){
+    public EntityModel<Funcionario> update(@RequestBody @Valid Funcionario funcionario, @PathVariable Long id){
         log.info("Atualizando o funcionario com id: " + id);
         
         getFuncionario(id);
@@ -76,7 +78,7 @@ public class FuncionarioController {
 
         funcionarioRepository.save(funcionario);
         
-        return ResponseEntity.ok(funcionario);
+        return funcionario.toModel();
     }
     
     @DeleteMapping("/{id}")

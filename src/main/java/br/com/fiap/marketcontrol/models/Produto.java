@@ -3,8 +3,15 @@ package br.com.fiap.marketcontrol.models;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.fiap.marketcontrol.controllers.ProdutoController;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,4 +50,12 @@ public class Produto {
 
     public Produto() {
     }  
+
+    public EntityModel<Produto> toModel(){
+        return EntityModel.of(
+        this,
+        linkTo(methodOn(ProdutoController.class).getById(id)).withSelfRel(),
+        linkTo(methodOn(ProdutoController.class).delete(id)).withRel("delete"),
+        linkTo(methodOn(ProdutoController.class).getAll(null, Pageable.unpaged())).withRel("all"));
+    }
 }

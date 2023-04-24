@@ -1,8 +1,15 @@
 package br.com.fiap.marketcontrol.models;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import br.com.fiap.marketcontrol.controllers.EstabelecimentoController;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +26,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Entity
 @Table(name = "MC_Estabelecimento")
-public class Estabelecimento {
+public class Estabelecimento{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +42,14 @@ public class Estabelecimento {
     private String cpfProprietario;
 
     public Estabelecimento() {
+    }
+
+    public EntityModel<Estabelecimento> toModel(){
+        return EntityModel.of(
+        this,
+        linkTo(methodOn(EstabelecimentoController.class).getById(id)).withSelfRel(),
+        linkTo(methodOn(EstabelecimentoController.class).delete(id)).withRel("delete"),
+        linkTo(methodOn(EstabelecimentoController.class).getAll(null, Pageable.unpaged())).withRel("all"));
     }
 
 }

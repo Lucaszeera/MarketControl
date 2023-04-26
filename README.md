@@ -57,7 +57,7 @@ Sistema de controle de estoque de comércios.
 	"data_cadastro": "2023-03-14",
 	"data_validade": "2023-06-14",
 	"quantidade": 201,
-    "estabelecimento":{
+   	"estabelecimento":{
 		"id": 1
 	}
 }

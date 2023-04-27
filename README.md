@@ -1,5 +1,5 @@
 # MarketControl
-Sistema de controle de estoque de comércios.
+Este é um sistema de controle de estoque de comércios em geral.
 
 ## Endpoints
 - [Cadastro de produto](#cadastrar-produto)
